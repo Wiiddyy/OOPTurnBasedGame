@@ -1,2 +1,2 @@
 "# OOPTurnBasedGame" 
-hi
+Must be finished November 8
