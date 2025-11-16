@@ -1,9 +1,9 @@
 public class Interface {
 
     public static void title() {
-        System.out.println("==================================");
-        System.out.println("        YAWA TURN-BASED GAME      ");
-        System.out.println("==================================");
+        System.out.println("========================================");
+        System.out.println("        FIGHT CLUB TURN BASED GAME      ");
+        System.out.println("========================================");
     }
 
     public static void showStats(String name, int hp, int maxHp) {
