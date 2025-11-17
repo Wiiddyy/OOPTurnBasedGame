@@ -6,8 +6,8 @@ public class Interface {
         System.out.println("========================================");
     }
 
-    public static void showStats(String name, int hp, int maxHp) {
-        System.out.printf("%s: HP %d/%d%n", name, Math.max(hp, 0), maxHp);
+    public static void showStats(String name, int hp, int maxHp, int mana, int maxMana) {
+        System.out.printf("%s: HP %d/%d%n MANA %d/%d%n", name, Math.max(hp, 0), maxHp, Math.max(mana, 0), maxMana);
     }
 
     public static void showBattleHeader() {

@@ -17,6 +17,11 @@ public enum CharacterClass {
     SHERWIN("Sherwin", 100, 50, List.of(
         new Skill("Rock Slam", 40, 15, "Stun"),
         new Skill("Rock Solid", 15, 10, "Freeze")
+    )),
+    CLYDE("Clyde", 120, 30, List.of(
+        new Skill("Slash", 20, 5, "None"),
+        new Skill("Bleed", 15, 10, "Bleed"),
+        new Skill("Charge", 25, 15, "Stun")
     ));
 
     private final String displayName;
