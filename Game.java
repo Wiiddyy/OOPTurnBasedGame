@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -80,137 +82,134 @@ public class Game {
         System.out.println("\nReturning to main menu.");
     }
 
-    private void battleLoop() {
-        boolean inBattle = true;
+private void battleLoop() {
+    boolean inBattle = true;
 
-        while (inBattle) {
-            MacroLib.clearConsole();
-            Interface.showBattleHeader();
+    // List of characters available to choose from
+    List<CharacterClass> availableClasses = new ArrayList<>(List.of(CharacterClass.values()));
 
-            // Show player stats
-            Interface.showStats(
-                    "You (" + playerClass.getDisplayName() + ")",
-                    playerHp, playerMaxHp,
-                    playerMana, playerMaxMana
-            );
-            System.out.println("HP Potions: " + hpPotions + " | Mana Potions: " + manaPotions);
-            // Show enemy stats
-            Interface.showStats(
-                    "Enemy (" + enemy.getName() + ")",
-                    enemy.getHp(), enemy.getMaxHp(),
-                    enemy.getMana(), enemy.getMaxMana()
-            );
+    while (inBattle) {
+        MacroLib.clearConsole();
+        Interface.showBattleHeader();
 
-            // Player action
-            int action = Menus.battleMenu();
-            boolean playerDefending = false;
-            boolean turnConsumed = true;
+        // Show player stats
+        Interface.showStats(
+                "You (" + playerClass.getDisplayName() + ")",
+                playerHp, playerMaxHp,
+                playerMana, playerMaxMana
+        );
+        System.out.println("HP Potions: " + hpPotions + " | Mana Potions: " + manaPotions);
 
-            switch (action) {
-                case 1 -> {
-                    playerUseSkill();
-                    turnConsumed = true;
-                }
-                case 2 -> {
-                    playerDefending = true;
-                    System.out.println("You brace for the enemy's attack (defending).");
-                    turnConsumed = true;
-                }
-                case 3 -> turnConsumed = usePotionMenu(); // if false, turn NOT consumed
-                case 4 -> {
-                    if (MacroLib.randInt(1, 100) <= 50) {
-                        System.out.println("You successfully ran away!");
-                        inBattle = false;
-                        continue;
-                    } else {
-                        System.out.println("You failed to run away!");
-                    }
-                }
+        // Show enemy stats
+        Interface.showStats(
+                "Enemy (" + enemy.getName() + ")",
+                enemy.getHp(), enemy.getMaxHp(),
+                enemy.getMana(), enemy.getMaxMana()
+        );
+
+        // Player action
+        int action = Menus.battleMenu();
+        boolean playerDefending = false;
+        boolean turnConsumed = true;
+
+        switch (action) {
+            case 1 -> {
+                playerUseSkill();
+                turnConsumed = true;
             }
-
-            // If turn not consumed, skip enemy action
-            if (!turnConsumed) continue;
-
-            // Check if enemy is defeated
-            if (!enemy.isAlive()) {
-                System.out.printf("\n%s defeated!%n", enemy.getName());
-                Interface.pauseLine();
-
-                // Heal player 30-50 after victory
-                int heal = MacroLib.randInt(30, 50);
-                playerHp = Math.min(playerMaxHp, playerHp + heal);
-                System.out.printf("You healed %d HP after defeating the enemy!%n", heal);
-
-                currentEnemyIndex++;
-
-                if (currentEnemyIndex < enemySequence.length) {
-                    enemy = enemySequence[currentEnemyIndex].create();
-                    System.out.printf("\nA new enemy appears: %s%n", enemy.getName());
-                    Interface.pauseLine();
-
-                    continue;
-                } else {
-                    System.out.println("\nAll enemies defeated! You win the game!");
+            case 2 -> {
+                playerDefending = true;
+                System.out.println("You brace for the enemy's attack (defending).");
+                turnConsumed = true;
+            }
+            case 3 -> turnConsumed = usePotionMenu(); // false if turn not consumed
+            case 4 -> {
+                if (MacroLib.randInt(1, 100) <= 50) {
+                    System.out.println("You successfully ran away!");
                     inBattle = false;
                     continue;
-                }
-            }
-
-            // Enemy turn
-            if (turnConsumed && enemy.isAlive()) {
-                Skill enemySkill = enemy.chooseSkill();
-
-                if (enemySkill != null) {
-                    // Enemy uses skill
-                    enemy.useMana(enemySkill.getManaCost());
-                    int dmg = enemySkill.getDamage();
-                    if (playerDefending) dmg /= 2;
-                    playerHp -= dmg;
-                    System.out.printf("Enemy used %s and dealt %d damage.%n", enemySkill.getName(), dmg);
-
-                    if (!enemySkill.getEffect().equals("None")) {
-                        System.out.println("Enemy skill effect: " + enemySkill.getEffect());
-                    }
                 } else {
-                    // Enemy regenerates 50% of max mana
-                    int manaRestore = enemy.getMaxMana() / 2;
-                    enemy.setMana(Math.min(enemy.getMaxMana(), enemy.getMana() + manaRestore));
-                    System.out.printf("Enemy drank a mana potion and restored %d mana!%n", manaRestore);
+                    System.out.println("You failed to run away!");
                 }
             }
+        }
 
-            /*Skill enemySkill = enemy.chooseSkill();
+        // If turn not consumed, skip enemy action
+        if (!turnConsumed) continue;
+
+        // Check if enemy is defeated
+        if (!enemy.isAlive()) {
+            System.out.printf("\n%s defeated!%n", enemy.getName());
+            Interface.pauseLine();
+
+            // Heal player 30-50 after victory
+            int heal = MacroLib.randInt(30, 50);
+            playerHp = Math.min(playerMaxHp, playerHp + heal);
+            System.out.printf("You healed %d HP after defeating the enemy!%n", heal);
+
+            currentEnemyIndex++;
+            if (currentEnemyIndex < enemySequence.length) {
+                enemy = enemySequence[currentEnemyIndex].create();
+                System.out.printf("\nA new enemy appears: %s%n", enemy.getName());
+                Interface.pauseLine();
+                continue; // skip enemy attack after spawning new enemy
+            } else {
+                System.out.println("\nAll enemies defeated! You win the game!");
+                inBattle = false;
+                continue;
+            }
+        }
+
+        // Enemy turn
+        if (turnConsumed && enemy.isAlive()) {
+            Skill enemySkill = enemy.chooseSkill();
             if (enemySkill != null) {
                 enemy.useMana(enemySkill.getManaCost());
                 int dmg = enemySkill.getDamage();
                 if (playerDefending) dmg /= 2;
                 playerHp -= dmg;
                 System.out.printf("Enemy used %s and dealt %d damage.%n", enemySkill.getName(), dmg);
-
-                if (!enemySkill.getEffect().equals("None")) {
-                    System.out.println("Enemy skill effect: " + enemySkill.getEffect());
-                }
             } else {
                 int dmg = MacroLib.randInt(6, 16);
                 if (playerDefending) dmg /= 2;
                 playerHp -= dmg;
                 System.out.printf("Enemy attacks and deals %d damage.%n", dmg);
-            }*/
+            }
+        }
 
-            // Check if player is defeated
-            if (playerHp <= 0) {
-                System.out.println("\nYou have been defeated...");
-                Interface.pauseLine();
-                playerHp = playerMaxHp;
-                playerMana = playerMaxMana;
+        // Check if player is defeated
+        if (playerHp <= 0) {
+            System.out.println("\nYou have been defeated...");
+            Interface.pauseLine();
+
+            // Remove dead character from available classes
+            availableClasses.remove(playerClass);
+
+            if (availableClasses.isEmpty()) {
+                System.out.println("All characters are dead. Game over!");
                 inBattle = false;
                 continue;
             }
 
-            System.out.println("\n(End of turn)");
+            System.out.println("Choose a new character to continue:");
+            playerClass = Menus.chooseCharacterFromList(availableClasses);
+
+            // Apply stats from newly chosen character
+            playerMaxHp = playerClass.getMaxHp();
+            playerHp = playerMaxHp;
+            playerMaxMana = playerClass.getMaxMana();
+            playerMana = playerMaxMana;
+
+            System.out.printf("You selected: %s%n", playerClass.getDisplayName());
             Interface.pauseLine();
+
+            continue; // skip enemy attack this round after re-selection
         }
+
+        System.out.println("\n(End of turn)");
+        Interface.pauseLine();
     }
+}
 
     private void playerUseSkill() {
         System.out.println("\nAvailable skills for " + playerClass.getDisplayName() + ":");

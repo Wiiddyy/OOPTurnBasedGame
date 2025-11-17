@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class Menus {
@@ -32,6 +33,37 @@ public class Menus {
         System.out.println("- Try to win fights!");
         Interface.pauseLine();
     }
+
+    // In Menus.java
+    public static CharacterClass chooseCharacterFromList(List<CharacterClass> availableClasses) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nAvailable characters:");
+            for (int i = 0; i < availableClasses.size(); i++) {
+                CharacterClass c = availableClasses.get(i);
+                System.out.printf("%d. %s (HP: %d, Mana: %d)%n", 
+                        i + 1, c.getDisplayName(), c.getMaxHp(), c.getMaxMana());
+            }
+            System.out.print("Choose a character: ");
+
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                continue;
+            }
+
+            if (choice < 1 || choice > availableClasses.size()) {
+                System.out.println("Invalid choice! Try again.");
+                continue;
+            }
+
+            return availableClasses.get(choice - 1);
+        }
+    }
+
 
     public static CharacterClass chooseCharacterMenu() {
         System.out.println("\nChoose Your Character:");
