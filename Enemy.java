@@ -1,11 +1,11 @@
 import java.util.List;
-
-
 // Base Class for the enemies
 public class Enemy {
     String name;
     int maxHp;
     int hp;
+    int maxMana;
+    int mana;
     int attack;
     List<Skill> skills; // Para ma list unsa nga skills ma use sa enemy
 
@@ -32,6 +32,14 @@ public class Enemy {
         return maxHp;
     } // Returns the enemy's max HP
 
+    public int getMana() {
+        return mana;
+    }
+
+    public int getMaxMana() {
+        return maxMana;
+    }
+
     public int getAttack() {
         return attack;
     } // Retrns the enemy's base attack power
@@ -54,11 +62,29 @@ public class Enemy {
         }
     }
 
+    // reduce mana when using a skill
+    public void useMana(int amount) {
+        mana -= amount;
+        if (mana < 0) {
+            mana = 0;
+        }
+    }
+
     // enemy picks random skills in their skill list
     public Skill chooseSkill() {
         if (skills == null || skills.isEmpty()) {
             return  null;
         } // tig check if naay skills ang enemy (Thanks sir Jeff for giving the idea of a checker) !
+
+        // creates a list of skills that the enemy has enough mana to use churva2
+        List<Skill> usableSkills = skills.stream() 
+                .filter(s -> s.getManaCost() <= mana)
+                .toList();
+
+        // if no skills can be used kay way mana
+        if (usableSkills.isEmpty()) {
+            return null;
+        }
 
         return skills.get(MacroLib.randInt(0, skills.size() - 1)); // generates a random index to pick a random skills sa skill list !
     }
