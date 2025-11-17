@@ -62,4 +62,9 @@ public class Enemy {
 
         return skills.get(MacroLib.randInt(0, skills.size() - 1)); // generates a random index to pick a random skills sa skill list !
     }
+
+    @Override
+    public String toString() {
+        return name + " HP: " + hp + "/" + maxHp;
+    }
 }

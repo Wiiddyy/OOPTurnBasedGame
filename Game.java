@@ -5,10 +5,15 @@ public class Game {
     private int playerMaxHp;
     private int playerPotions;
     private int playerMana;
+    private int playerMaxMana;
     private int enemyHp;
     private int enemyMaxHp;
+    private int enemyMana;
+    private int enemyMaxMana;
     private boolean running;
     private CharacterClass playerClass;
+
+    private Enemy enemy;
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -66,8 +71,8 @@ public class Game {
         while (inBattle) {
             MacroLib.clearConsole();
             Interface.showBattleHeader();
-            Interface.showStats("You (" + playerClass.getDisplayName() + ")", playerHp, playerMaxHp);
-            Interface.showStats("Enemy", enemyHp, enemyMaxHp);
+            Interface.showStats("You (" + playerClass.getDisplayName() + ")", playerHp, playerMaxHp, playerMana, playerMaxMana);
+            Interface.showStats("Enemy", enemyHp, enemyMaxHp, enemyMana, enemyMaxMana);
 
             int action = Menus.battleMenu();
             boolean playerDefending = false;
