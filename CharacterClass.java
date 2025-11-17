@@ -1,10 +1,10 @@
 import java.util.List;
 
 public enum CharacterClass {
-    MARK("Mark", 120, 30, List.of(
-        new Skill("Analytical Strike", 20, 5, "None"),
+    MARK("Mark", 120, 40, List.of(
+        new Skill("Analytical Strike", 10, 5, "None"),
         new Skill("Crypto Drain", 15, 10, "Weaken"),
-        new Skill("High-Risk Charge", 25, 15, "Stun")
+        new Skill("High-Risk Charge", 80, 0, "Stun")
     )),
     MICO ("Mico", 80, 100, List.of(
         new Skill("Flame Shuriken", 30, 20, "Burn"),
@@ -12,17 +12,17 @@ public enum CharacterClass {
         new Skill("Shadow Step", 25, 10, "None")
     )),
     JENO ("Jeno", 100, 50, List.of(
-        new Skill("Sand Shot", 15, 5, "None"),
-        new Skill("Toxic Quirk", 10, 10, "Poison"),
-        new Skill("Desert Mirage", 20, 15, "Confuse")
+        new Skill("Sand Shot", 10, 5, "None"),
+        new Skill("Toxic Quirk", 20, 10, "Poison"),
+        new Skill("Desert Mirage", 30, 20, "Confuse")
     )),
-    SHERWIN("Sherwin", 100, 50, List.of(
-        new Skill("Ritual Slam", 30, 15, "Stun"),
+    SHERWIN("Sherwin", 150, 70, List.of(
+        new Skill("Ritual Slam", 25, 15, "Stun"),
         new Skill("Discipline Shield", 15, 10, "Freeze"),
         new Skill("Cult's Wrath", 30, 20, "Fear")
     )),
-    CLYDE("Clyde", 120, 30, List.of(
-        new Skill("Silent Slash", 20, 5, "None"),
+    CLYDE("Clyde", 120, 40, List.of(
+        new Skill("Silent Slash", 10, 5, "None"),
         new Skill("Soul Bleed", 15, 10, "Bleed"),
         new Skill("Preemptive Strike", 25, 15, "Stun")
     ));

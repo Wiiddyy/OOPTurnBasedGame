@@ -3,17 +3,16 @@ import java.util.List;
 // Enum containing all enemy types of the game, each enemy has its own stats and skills
 public enum EnemyType {
     JUNIOR("Junior", 100,80, List.of(
-        new Skill("Slash", 20, 5, "None"),
-        new Skill("Bleed", 15, 10, "Bleed"),
-        new Skill("Charge", 25, 15, "Stun")
+        new Skill("Rookie Slash", 15, 10, "Bleed"),
+        new Skill("Bull Charge", 25, 15, "Stun")
     )),
     SENIOR("Senior", 125, 40, List.of(
-        new Skill("Smash", 25, 10, "Stun"),
-        new Skill("Bleed", 20, 10, "Bleed")
+        new Skill("Ground Pound", 25, 10, "Stun"),
+        new Skill("Bloodletting Strike", 20, 10, "Bleed")
     )),
     BOSS("Boss", 200, 50, List.of(
-        new Skill("Smash", 30, 10, "Stun"),
-        new Skill("Fireball", 35, 15, "Burn")
+        new Skill("Titan Smash", 30, 10, "Stun"),
+        new Skill("Inferno Orb", 35, 15, "Burn")
     ));
 
     // Stats stored in enum

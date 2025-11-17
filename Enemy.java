@@ -17,8 +17,6 @@ public class Enemy {
         this.hp = maxHp; // indicator nga enemy starts with max HP.
         this.attack = attack;
         this.skills = skills;
-        this.maxMana = maxMana;
-        this.mana = maxMana;
     }
 
     // Reads enemy infos yadadee yadadoo.
