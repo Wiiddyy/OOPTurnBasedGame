@@ -17,6 +17,8 @@ public class Enemy {
         this.hp = maxHp; // indicator nga enemy starts with max HP.
         this.attack = attack;
         this.skills = skills;
+        this.maxMana = maxMana;
+        this.mana = maxMana;
     }
 
     // Reads enemy infos yadadee yadadoo.
@@ -54,6 +56,16 @@ public class Enemy {
         return hp > 0;
     }
 
+    // setter for current mana
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+    // setter for max mana
+    public void setMaxMana(int maxMana) {
+        this.maxMana = maxMana;
+    }
+
     // reduce enemy HP when attacked
     public void takeDamage(int amount) {
         hp -= amount;
@@ -70,6 +82,8 @@ public class Enemy {
         }
     }
 
+
+
     // enemy picks random skills in their skill list
     public Skill chooseSkill() {
         if (skills == null || skills.isEmpty()) {
@@ -77,16 +91,16 @@ public class Enemy {
         } // tig check if naay skills ang enemy (Thanks sir Jeff for giving the idea of a checker) !
 
         // creates a list of skills that the enemy has enough mana to use churva2
-        List<Skill> usableSkills = skills.stream() 
-                .filter(s -> s.getManaCost() <= mana)
-                .toList();
+        List<Skill> usableSkills = skills.stream()
+        .filter(s -> s.getManaCost() <= mana)
+        .toList();
 
-        // if no skills can be used kay way mana
+        // if no usuable skill because no mana
         if (usableSkills.isEmpty()) {
             return null;
         }
 
-        return skills.get(MacroLib.randInt(0, skills.size() - 1)); // generates a random index to pick a random skills sa skill list !
+        return usableSkills.get(MacroLib.randInt(0, usableSkills.size() - 1)); // generates a random index to pick a random skills sa skill list !
     }
 
     @Override

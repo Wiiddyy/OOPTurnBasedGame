@@ -1,23 +1,29 @@
 import java.util.Scanner;
 
 public class Game {
+    // Player stats
     private int playerHp;
     private int playerMaxHp;
-    private int playerPotions;
     private int playerMana;
     private int playerMaxMana;
-    private int enemyHp;
-    private int enemyMaxHp;
-    private int enemyMana;
-    private int enemyMaxMana;
-    private boolean running;
+    private int hpPotions;
+    private int manaPotions;
     private CharacterClass playerClass;
 
+    // Enemy stats
     private Enemy enemy;
 
     private final Scanner scanner = new Scanner(System.in);
 
-    public Game() { }
+    // Enemy sequence
+    private final EnemyType[] enemySequence = {
+            EnemyType.JUNIOR,
+            EnemyType.SENIOR,
+            EnemyType.BOSS
+    };
+    private int currentEnemyIndex = 0;
+
+    private boolean running;
 
     public static void main(String[] args) {
         MacroLib.clearConsole();
@@ -32,27 +38,18 @@ public class Game {
         while (running) {
             int choice = Menus.mainMenu();
             switch (choice) {
-                case 1: startNewGame(); break;
-                case 2: Menus.howToPlay(); break;
-                case 3: System.out.println("Goodbye!"); running = false; break;
+                case 1 -> startNewGame();
+                case 2 -> Menus.howToPlay();
+                case 3 -> {
+                    System.out.println("Goodbye!");
+                    running = false;
+                }
             }
         }
     }
 
-    private EnemyType[] enemySequence = {
-        EnemyType.JUNIOR,
-        EnemyType.SENIOR,
-        EnemyType.BOSS
-    };
-
-    private int currentEnemyIndex = 0; //tracks which enemy in seuqnce
-
     private void startNewGame() {
         System.out.println("\nStarting new game...");
-
-        // reset enemy sequence for new game
-        currentEnemyIndex = 0;
-        enemy = enemySequence[currentEnemyIndex].create();
 
         // Character Selection
         playerClass = Menus.chooseCharacterMenu();
@@ -60,27 +57,31 @@ public class Game {
         // Apply stats from chosen character
         playerMaxHp = playerClass.getMaxHp();
         playerHp = playerMaxHp;
-        playerMana = playerClass.getMaxMana();
-        playerPotions = 3; // default potions
+
+        playerMaxMana = playerClass.getMaxMana();
+        playerMana = playerMaxMana;
+
+        hpPotions = 3;
+        manaPotions = 3;
 
         System.out.println("You selected: " + playerClass.getDisplayName());
         System.out.println("HP: " + playerHp + "/" + playerMaxHp);
-        System.out.println("Mana: " + playerMana + "/" + playerClass.getMaxMana());
+        System.out.println("Mana: " + playerMana + "/" + playerMaxMana);
+        System.out.println("HP Potions: " + hpPotions + " | Mana Potions: " + manaPotions);
 
         Interface.pauseLine();
 
-        // Spawn enemy
+        // Reset enemy sequence
+        currentEnemyIndex = 0;
+        enemy = enemySequence[currentEnemyIndex].create();
 
         battleLoop();
 
         System.out.println("\nReturning to main menu.");
     }
 
-private void battleLoop() {
+    private void battleLoop() {
     boolean inBattle = true;
-
-    // Initialize first enemy in sequence
-    enemy = enemySequence[currentEnemyIndex].create();
 
     while (inBattle) {
         MacroLib.clearConsole();
@@ -89,49 +90,46 @@ private void battleLoop() {
         // Show player stats
         Interface.showStats(
                 "You (" + playerClass.getDisplayName() + ")",
-                playerHp,
-                playerMaxHp,
-                playerMana,
-                playerMaxMana
+                playerHp, playerMaxHp,
+                playerMana, playerMaxMana
         );
+        System.out.println("HP Potions: " + hpPotions + " | Mana Potions: " + manaPotions);
 
         // Show enemy stats
         Interface.showStats(
                 "Enemy (" + enemy.getName() + ")",
-                enemy.getHp(),
-                enemy.getMaxHp(),
-                enemy.getMana(),
-                enemy.getMaxMana()
+                enemy.getHp(), enemy.getMaxHp(),
+                enemy.getMana(), enemy.getMaxMana()
         );
 
         // Player action
-        int action = Menus.battleMenu();
         boolean playerDefending = false;
+        boolean actionTaken = false; // flag to check if player's turn is consumed
 
-        switch (action) {
-            case 1 -> playerUseSkill();
-            case 2 -> {
-                playerDefending = true;
-                System.out.println("You brace for the enemy's attack (defending).");
-            }
-            case 3 -> {
-                if (playerPotions > 0) {
-                    int heal = MacroLib.randInt(15, 30);
-                    playerHp = Math.min(playerMaxHp, playerHp + heal);
-                    playerPotions--;
-                    System.out.printf("You use a potion and heal %d HP. (%d left)%n", heal, playerPotions);
-                } else {
-                    System.out.println("No potions left!");
+        while (!actionTaken) {
+            int action = Menus.battleMenu();
+
+            switch (action) {
+                case 1 -> { // Use skill
+                    playerUseSkill();
+                    actionTaken = true; // turn consumed
                 }
-            }
-            case 4 -> {
-                if (MacroLib.randInt(1, 100) <= 50) {
-                    System.out.println("You successfully ran away!");
-                    inBattle = false;
-                    continue;
-                } else {
-                    System.out.println("You failed to run away!");
+                case 2 -> { // Defend
+                    playerDefending = true;
+                    System.out.println("You brace for the enemy's attack (defending).");
+                    actionTaken = true; // turn consumed
                 }
+                case 3 -> usePotionMenu(); // Use potion, does NOT consume turn
+                case 4 -> { // Run away
+                    if (MacroLib.randInt(1, 100) <= 50) {
+                        System.out.println("You successfully ran away!");
+                        return; // exit battle loop immediately
+                    } else {
+                        System.out.println("You failed to run away!");
+                        actionTaken = true; // failed escape consumes turn
+                    }
+                }
+                default -> System.out.println("Invalid choice! Try again.");
             }
         }
 
@@ -139,7 +137,7 @@ private void battleLoop() {
         if (!enemy.isAlive()) {
             System.out.printf("\n%s defeated!%n", enemy.getName());
             Interface.pauseLine();
-            currentEnemyIndex++; // move to next enemy in sequence
+            currentEnemyIndex++;
 
             if (currentEnemyIndex < enemySequence.length) {
                 enemy = enemySequence[currentEnemyIndex].create();
@@ -164,8 +162,7 @@ private void battleLoop() {
             if (!enemySkill.getEffect().equals("None")) {
                 System.out.println("Enemy skill effect: " + enemySkill.getEffect());
             }
-        } else {
-            // fallback basic attack
+        } else { // fallback basic attack
             int dmg = MacroLib.randInt(6, 16);
             if (playerDefending) dmg /= 2;
             playerHp -= dmg;
@@ -187,7 +184,6 @@ private void battleLoop() {
     }
 }
 
-
     private void playerUseSkill() {
         System.out.println("\nAvailable skills for " + playerClass.getDisplayName() + ":");
         for (int i = 0; i < playerClass.getSkills().size(); i++) {
@@ -204,24 +200,57 @@ private void battleLoop() {
 
         Skill selectedSkill = playerClass.getSkills().get(choice - 1);
 
-
-        // mana checker
         if (playerMana < selectedSkill.getManaCost()) {
             System.out.println("Not enough mana!");
             return;
         }
 
-        // mana consume
+        // consume mana and deal damage
         playerMana -= selectedSkill.getManaCost();
-
-        // apply damage
         enemy.takeDamage(selectedSkill.getDamage());
-        System.out.printf("You used %s and dealth %d damage!%n",
-                    selectedSkill.getName(), selectedSkill.getDamage());
+
+        System.out.printf("You used %s and dealt %d damage!%n",
+                selectedSkill.getName(), selectedSkill.getDamage());
 
         if (!selectedSkill.getEffect().equals("None")) {
             System.out.println("Effect applied: " + selectedSkill.getEffect());
-            // Later: implement Stun, Bleed, Burn, etc.
+        }
+    }
+
+        private void usePotionMenu() {
+        while (true) {
+            System.out.println("\nWhich potion do you want to use?");
+            System.out.println("1. HP Potion (" + hpPotions + " left)");
+            System.out.println("2. Mana Potion (" + manaPotions + " left)");
+            System.out.println("3. Back to action menu");
+            System.out.print("Choose an option: ");
+            int potionChoice = scanner.nextInt();
+
+            switch (potionChoice) {
+                case 1 -> {
+                    if (hpPotions > 0) {
+                        int heal = MacroLib.randInt(15, 30);
+                        playerHp = Math.min(playerMaxHp, playerHp + heal);
+                        hpPotions--;
+                        System.out.printf("You used an HP potion and healed %d HP (%d left)%n", heal, hpPotions);
+                        return; // return immediately, turn is NOT consumed
+                    } else System.out.println("No HP potions left!");
+                }
+                case 2 -> {
+                    if (manaPotions > 0) {
+                        int restore = MacroLib.randInt(15, 30);
+                        playerMana = Math.min(playerMaxMana, playerMana + restore);
+                        manaPotions--;
+                        System.out.printf("You used a Mana potion and restored %d Mana (%d left)%n", restore, manaPotions);
+                        return; // return immediately, turn is NOT consumed
+                    } else System.out.println("No Mana potions left!");
+                }
+                case 3 -> {
+                    System.out.println("Returning to action menu...");
+                    return; // just go back to action menu
+                }
+                default -> System.out.println("Invalid choice! Try again.");
+            }
         }
     }
 }

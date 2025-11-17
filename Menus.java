@@ -16,7 +16,7 @@ public class Menus {
         System.out.println("\nChoose action:");
         System.out.println("1) Attack (Use Skill)");
         System.out.println("2) Defend");
-        System.out.println("3) Item (heal)");
+        System.out.println("3) Potions");
         System.out.println("4) Run");
         System.out.print("> ");
         return readIntInRange(1, 4);
