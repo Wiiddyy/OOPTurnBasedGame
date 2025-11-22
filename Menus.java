@@ -29,7 +29,7 @@ public class Menus {
         System.out.println("- Choose actions each turn in battle.");
         System.out.println("- Attack uses class skills to reduce enemy HP.");
         System.out.println("- Defend reduces incoming damage this turn.");
-        System.out.println("- Items heal you.");
+        System.out.println("- Using potions can regenerate your HP and MANA.");
         System.out.println("- Try to win fights!");
         Interface.pauseLine();
     }
