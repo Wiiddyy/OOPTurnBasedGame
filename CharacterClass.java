@@ -1,47 +1,87 @@
+import java.util.ArrayList;
 import java.util.List;
 
-public enum CharacterClass {
-    MARK("Mark", 120, 40, List.of(
-        new Skill("Analytical Strike", 10, 5, "None"),
-        new Skill("Crypto Drain", 15, 10, "Weaken"),
-        new Skill("High-Risk Charge", 80, 0, "Stun")
-    )),
-    MICO ("Mico", 80, 100, List.of(
-        new Skill("Flame Shuriken", 30, 20, "Burn"),
-        new Skill("Frozen Domain", 20, 15, "Freeze"),
-        new Skill("Shadow Step", 25, 10, "None")
-    )),
-    JENO ("Jeno", 100, 50, List.of(
-        new Skill("Sand Shot", 10, 5, "None"),
-        new Skill("Toxic Quirk", 20, 10, "Poison"),
-        new Skill("Desert Mirage", 30, 20, "Confuse")
-    )),
-    SHERWIN("Sherwin", 150, 70, List.of(
-        new Skill("Ritual Slam", 25, 15, "Stun"),
-        new Skill("Discipline Shield", 15, 10, "Freeze"),
-        new Skill("Cult's Wrath", 30, 20, "Fear")
-    )),
-    CLYDE("Clyde", 120, 40, List.of(
-        new Skill("Silent Slash", 10, 5, "None"),
-        new Skill("Soul Bleed", 15, 10, "Bleed"),
-        new Skill("Preemptive Strike", 25, 15, "Stun")
-    ));
+public class CharacterClass {
 
-    private final String displayName;
+    private final String name;
     private final int maxHp;
     private final int maxMana;
     private final List<Skill> skills;
 
-    CharacterClass(String displayName, int maxHp, int maxMana, List<Skill> skills) {
-        this.displayName = displayName;
-        this.maxHp = maxHp;
-        this.maxMana = maxMana;
-        this.skills = skills;
+    private CharacterClass(Builder b) {
+        this.name = b.name;
+        this.maxHp = b.maxHp;
+        this.maxMana = b.maxMana;
+        this.skills = b.skills;
     }
 
     // Getters
-    public String getDisplayName() { return displayName; }
+    public String getDisplayName() { return name; }
     public int getMaxHp() { return maxHp; }
     public int getMaxMana() { return maxMana; }
     public List<Skill> getSkills() { return skills; }
+
+    // builder class (sulod ra diri)
+    public static class Builder {
+        private String name;
+        private int maxHp;
+        private int maxMana;
+        private List<Skill> skills = new ArrayList<>();
+
+
+        // para i-set ang name (return this para pwede ma chain)
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        //set sa HP (again, chainable ra.. etc)
+        public Builder maxHp(int maxHp) {
+            this.maxHp = maxHp;
+            return this;
+        }
+
+        public Builder maxMana(int maxMana) {
+            this.maxMana = maxMana;
+            return this;
+        }
+
+        public Builder skills(List<Skill> skills) {
+            this.skills = skills;
+            return this;
+        }
+
+        // Murag "finalize" mao ni ang mo build sa final CharacterClass object
+        public CharacterClass build() {
+            return new CharacterClass(this);
+        }
+    }
+
+    public static final CharacterClass MARK = new CharacterClass.Builder()
+        .name("Mark")
+        .maxHp(100)
+        .maxMana(60)
+        .skills(List.of(
+            new Skill ("Kalimot ko", 18, 10, "None")
+        ))
+        .build();
+
+    public static final CharacterClass JENO = new CharacterClass.Builder()
+        .name("Jeno")
+        .maxHp(100)
+        .maxMana(60)
+        .skills(List.of(
+            new Skill ("Testing", 20, 10, "None")
+        ))
+        .build();
+
+
+    @Override
+    public String toString() {
+        return name + " HP: " + maxHp + " Mana: " + maxMana;
+    }
+
+    public static List<CharacterClass> getAllCharacters() {
+        return List.of(MARK, JENO);
+    }
 }

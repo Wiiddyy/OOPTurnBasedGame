@@ -73,5 +73,9 @@ public abstract class Entity {
         mana = Math.max(0, mana - amount);
     }
 
+    public void restoreMana(int amount) {
+        mana = Math.min(maxMana, mana + amount);
+    }
+
     public abstract Skill chooseAction(Entity target);
 }

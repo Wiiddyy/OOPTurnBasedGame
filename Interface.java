@@ -7,7 +7,7 @@ public class Interface {
     }
 
     //public static void showStats(String name, int hp, int maxHp,int mana, int maxMana) {
-        //System.out.printf("%s: HP %d/%d%n MANA %d/%d%n", name, Math.max(hp, 0), maxHp, Math.max(mana, 0), maxMana);
+    //System.out.printf("%s: HP %d/%d%n MANA %d/%d%n", name, Math.max(hp, 0), maxHp, Math.max(mana, 0), maxMana);
     ///}
     
     public static void showStats(String name, int hp, int maxHp, int mana, int maxMana) {
