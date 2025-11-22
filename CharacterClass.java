@@ -6,8 +6,8 @@ public enum CharacterClass {
         new Skill("Crypto Drain", 15, 10, "Weaken"),
         new Skill("High-Risk Charge", 80, 0, "Stun")
     )),
-    MICO ("Mico", 80, 100, List.of(
-        new Skill("Flame Shuriken", 30, 20, "Burn"),
+    MICO ("Micogwapo", 100, 100, List.of(
+        new Skill("OTIN DAKO", 30, 20, "Burn"),
         new Skill("Frozen Domain", 20, 15, "Freeze"),
         new Skill("Shadow Step", 25, 10, "None")
     )),
