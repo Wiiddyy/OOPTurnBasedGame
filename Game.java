@@ -3,6 +3,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game {
+
+    private Player player;
+
     // Player stats
     private int playerHp;
     private int playerMaxHp;
