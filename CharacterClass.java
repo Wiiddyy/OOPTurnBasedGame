@@ -38,7 +38,7 @@ public enum CharacterClass {
         this.maxMana = maxMana;
         this.skills = skills;
     }
-
+    // bayot si mark
     // Getters
     public String getDisplayName() { return displayName; }
     public int getMaxHp() { return maxHp; }
