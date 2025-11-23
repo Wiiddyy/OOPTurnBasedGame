@@ -51,7 +51,7 @@ public class Game {
                 chosenClass.getDisplayName(),
                 chosenClass.getMaxHp(),
                 chosenClass.getMaxMana(),
-                0, // attack placeholder
+                0, // attack dmg yadadee set to 0
                 chosenClass.getSkills()
         );
 
@@ -62,7 +62,7 @@ public class Game {
 
         // Start first enemy
         currentEnemyIndex = 0;
-        enemy = enemySequence[currentEnemyIndex].create();
+        enemy = enemySequence[currentEnemyIndex].createEnemy();
 
         battleLoop();
 
@@ -76,12 +76,11 @@ public class Game {
             MacroLib.clearConsole();
             Interface.showBattleHeader();
 
-            // Show player stats
+            // shows player and enemy stats
             Interface.showStats("You (" + player.getName() + ")",
                     player.getHp(), player.getMaxHp(),
                     player.getMana(), player.getMaxMana());
 
-            // Show enemy stats
             Interface.showStats("Enemy (" + enemy.getName() + ")",
                     enemy.getHp(), enemy.getMaxHp(),
                     enemy.getMana(), enemy.getMaxMana());
@@ -106,10 +105,7 @@ public class Game {
                         } else {
                             System.out.println("Not enough mana!");
                         }
-                    } else {
-                        System.out.println("Turn missed!");
                     }
-                    turnConsumed = true;
                 }
                 case 2 -> {
                     playerDefending = true;
@@ -154,7 +150,7 @@ public class Game {
 
                 currentEnemyIndex++;
                 if (currentEnemyIndex < enemySequence.length) {
-                    enemy = enemySequence[currentEnemyIndex].create();
+                    enemy = enemySequence[currentEnemyIndex].createEnemy();
                     System.out.printf("\nA new enemy appears: %s%n", enemy.getName());
                     Interface.pauseLine();
                 } else {

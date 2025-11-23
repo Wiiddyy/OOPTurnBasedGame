@@ -2,12 +2,12 @@ import java.util.List;
 
 public class Enemy extends Entity {
 
-    public Enemy(String name, int maxHp, int maxMana, int attack, List<Skill> skills) {
+    public Enemy(String name, int maxHp, int maxMana, List<Skill> skills) {
         super(
             name,
             maxHp,
             maxMana,
-            attack,
+            0,
             skills
         );
     }
