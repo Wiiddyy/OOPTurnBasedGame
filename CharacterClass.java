@@ -16,7 +16,7 @@ public class CharacterClass {
     }
 
     // Getters
-    public String getDisplayName() { return name; }
+    public String getName() { return name; }
     public int getMaxHp() { return maxHp; }
     public int getMaxMana() { return maxMana; }
     public List<Skill> getSkills() { return skills; }

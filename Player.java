@@ -20,24 +20,15 @@ public class Player extends Entity {
             System.out.println((i + 1) + ". " + skills.get(i));
         }
 
-        System.out.print("Choose a skill: ");
-        int choice;
-
-        try {
-            choice = Integer.parseInt(new java.util.Scanner(System.in).nextLine());
-        } catch (Exception e) {
-            System.out.println("Invalid input!"); {
-                return null;
-            }
-        }
-
+        int choice = Menus.readIntInRange(1, skills.size(), "Choose a skill: ");
         Skill chosen = skills.get(choice - 1);
 
         if (mana < chosen.getManaCost()) {
             System.out.println("Not enough mana!");
             return null;
-        }
-
-        return chosen;
     }
+
+    return chosen;
+}
+
 }
