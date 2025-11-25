@@ -62,7 +62,8 @@ public class CharacterClass {
         .maxHp(100)
         .maxMana(60)
         .skills(List.of(
-            new Skill ("Kalimot ko", 18, 10, "None")
+            new Skill ("Kalimot ko", 18, 10, "None"),
+            new Skill ("Tarantado", 20, 5, "None")
         ))
         .build();
 
@@ -75,6 +76,33 @@ public class CharacterClass {
         ))
         .build();
 
+    public static final CharacterClass CLYDE = new CharacterClass.Builder()
+        .name("Clyde")
+        .maxHp(100)
+        .maxMana(60)
+        .skills(List.of(
+            new Skill ("Holy INC", 50, 50, "None")
+        ))
+        .build();
+    
+    public static final CharacterClass MICO = new CharacterClass.Builder()
+        .name("Mico")
+        .maxHp(100)
+        .maxMana(60)
+        .skills(List.of(
+            new Skill ("Crazy", 50, 50, "None")
+        ))
+        .build();
+
+    public static final CharacterClass SHERWIN = new CharacterClass.Builder()
+        .name("Sherwin")
+        .maxHp(100)
+        .maxMana(60)
+        .skills(List.of(
+            new Skill ("Crazy", 50, 50, "None")
+        ))
+        .build();
+
 
     @Override
     public String toString() {
@@ -82,6 +110,6 @@ public class CharacterClass {
     }
 
     public static List<CharacterClass> getAllCharacters() {
-        return List.of(MARK, JENO);
+        return List.of(MARK, JENO, CLYDE, MICO, SHERWIN);
     }
 }
