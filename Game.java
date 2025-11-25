@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
-/*
- Chill comments with a bit of Bisaya peppered in:
- - Kini ang full Game.java nga imong gihangyo.
- - Transparency fixed so background layers actually show.
- - Ayaw kabalaka, wala ko gi-unsa ang game logic (gihikling lang ang UI transparency stuff).
-*/
-
 public class Game extends JFrame {
     private Player player;
     private Enemy enemy;
