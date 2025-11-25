@@ -50,6 +50,10 @@ public abstract class Entity {
         return maxMana;
     }
 
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
     public int getAttack() {
         return attack;
     }

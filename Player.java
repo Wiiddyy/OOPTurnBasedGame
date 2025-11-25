@@ -1,18 +1,43 @@
 import java.util.List;
 
 public class Player extends Entity {
+    private int hpPotions;
+    private int manaPotions;
 
-    public Player(String name, int maxHp, int maxMana, int attack, List<Skill> skills) {
+    public Player(String name, int maxHp, int maxMana, int attack, int par1, List<Skill> skills) {
         super(
             name,
             maxHp,
             maxMana,
-            0, // ang attack ni, 0 for now
+            attack,
             skills
         );
+        this.hpPotions = 5;
+        this.manaPotions = 5;
     }
 
-    // Choose skill (override abstarct method from entity)
+    public int getHpPotions() {
+        return hpPotions;
+    }
+
+    public void useHpPotion() {
+        if (hpPotions > 0) {
+            hpPotions--;
+        }
+    }
+
+    public int getManaPotions() {
+        return manaPotions;
+    }
+
+    public void useManaPotion() {
+        if (manaPotions > 0) {
+            manaPotions--;
+        }
+    }
+
+
+    // Choose skill (override abstract method from entity)
     @Override
     public Skill chooseAction(Entity target) {
         System.out.println("\nYour Skills:");
@@ -26,9 +51,9 @@ public class Player extends Entity {
         if (mana < chosen.getManaCost()) {
             System.out.println("Not enough mana!");
             return null;
-    }
+        }
 
-    return chosen;
-}
+        return chosen;
+    }
 
 }

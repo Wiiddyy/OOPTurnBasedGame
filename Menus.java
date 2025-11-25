@@ -43,7 +43,7 @@ public class Menus {
                     i + 1, c.getName(), c.getMaxHp(), c.getMaxMana()
                 );
             }
-            int choice = readIntInRange(1, availableClasses.size(), "Choose a character: ");
+            int choice = readIntInRange(1, availableClasses.size(), "Choose a character (Enter a number): ");
             return availableClasses.get(choice - 1);
         }
     }
@@ -74,7 +74,7 @@ public class Menus {
                 }
                 return v;
             } catch (NumberFormatException e) {
-                System.out.print("Please enter a number: ");
+                
             }
         }
     }
