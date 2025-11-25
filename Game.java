@@ -522,13 +522,7 @@ public class Game extends JFrame {
         revalidate();
         repaint();
     }
-
-    /* -------------------------
-       BackgroundPanel - 2 layer
-       -------------------------
-       bottom bg = bg1, top overlay = bg2
-       gamay lang ang comments para di formal kaayo
-    */
+    
     class BackgroundPanel extends JPanel {
         private Image bg1, bg2;
 
