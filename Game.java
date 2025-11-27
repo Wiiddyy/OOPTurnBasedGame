@@ -32,8 +32,8 @@ public class Game extends JFrame {
         getContentPane().removeAll();
 
         BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+                "OOPTurnBasedGame\\Assets\\background1.png",
+                "OOPTurnBasedGame\\Assets\\background2.png"
         );
 
         // IMPORTANT: set layout on the background panel (not on the frame)
@@ -44,7 +44,7 @@ public class Game extends JFrame {
         bgPanel.add(Box.createVerticalStrut(100));
 
         // title as image (not a button)
-        String titleImgPath = "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\titlesc.png";
+        String titleImgPath = "OOPTurnBasedGame\\Assets\\titlesc.png";
         ImageIcon titleIcon = new ImageIcon(titleImgPath);
         Image titleImg = titleIcon.getImage().getScaledInstance(600, 150, Image.SCALE_SMOOTH);
         JLabel titleLabel = new JLabel(new ImageIcon(titleImg));
@@ -55,9 +55,9 @@ public class Game extends JFrame {
         bgPanel.add(Box.createVerticalStrut(40));
 
         // paths for the button images
-        String startImgPath = "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\startbtn.png";
-        String howToPlayImgPath = "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\howtoplaybtn.png";
-        String exitImgPath = "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\exitbtn.png";
+        String startImgPath = "OOPTurnBasedGame\\Assets\\startbtn.png";
+        String howToPlayImgPath = "OOPTurnBasedGame\\Assets\\howtoplaybtn.png";
+        String exitImgPath = "OOPTurnBasedGame\\Assets\\exitbtn.png";
 
         // create image buttons and scale them
         JButton startBtn = makeImageButton(startImgPath, 250, 70);
@@ -117,8 +117,8 @@ public class Game extends JFrame {
 
         // BACKGROUND PANEL
         BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+                "OOPTurnBasedGame\\Assets\\background2.png",
+                "OOPTurnBasedGame\\Assets\\background1.png"
         );
         bgPanel.setLayout(new GridBagLayout());
         setContentPane(bgPanel);
@@ -191,8 +191,8 @@ public class Game extends JFrame {
         getContentPane().removeAll();
 
         BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+                "OOPTurnBasedGame\\Assets\\background2.png",
+                "OOPTurnBasedGame\\Assets\\background1.png"
         );
         bgPanel.setLayout(new GridBagLayout());
         setContentPane(bgPanel);
@@ -319,8 +319,8 @@ public class Game extends JFrame {
         getContentPane().removeAll();
 
         BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+                "OOPTurnBasedGame\\Assets\\background2.png",
+                "OOPTurnBasedGame\\Assets\\background1.png"
         );
         bgPanel.setLayout(new BorderLayout());
         setContentPane(bgPanel);
@@ -341,7 +341,7 @@ public class Game extends JFrame {
 
         int index = 0;
         for (CharacterClass cc : availableCharacters) {
-            ImageIcon img = new ImageIcon("D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\" + cc.getName() + ".png");
+            ImageIcon img = new ImageIcon(getClass().getResource("/Assets/" + cc.getName() + ".png"));
             Image scaled = img.getImage().getScaledInstance(220, 320, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaled);
 
@@ -400,8 +400,8 @@ public class Game extends JFrame {
     getContentPane().removeAll();
 
     BackgroundPanel bgPanel = new BackgroundPanel(
-        "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
-        "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+        "OOPTurnBasedGame\\Assets\\background2.png",
+        "OOPTurnBasedGame\\Assets\\background1.png"
     );
     bgPanel.setLayout(new BorderLayout(10, 10)); 
     setContentPane(bgPanel);
@@ -684,8 +684,8 @@ public class Game extends JFrame {
         getContentPane().removeAll();
 
         BackgroundPanel bgPanel = new BackgroundPanel(
-            "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
-            "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+            "OOPTurnBasedGame\\Assets\\background2.png",
+            "OOPTurnBasedGame\\Assets\\background1.png"
         );
         bgPanel.setLayout(new BoxLayout(bgPanel, BoxLayout.Y_AXIS));
         setContentPane(bgPanel);
@@ -762,8 +762,8 @@ public class Game extends JFrame {
         getContentPane().removeAll();
 
         BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
-                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+                "OOPTurnBasedGame\\Assets\\background2.png",
+                "OOPTurnBasedGame\\Assets\\background1.png"
         );
         bgPanel.setLayout(new BorderLayout());
         setContentPane(bgPanel);
@@ -782,7 +782,7 @@ public class Game extends JFrame {
 
         int index = 0;
         for (CharacterClass cc : availableCharacters) {
-            ImageIcon img = new ImageIcon("D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\" + cc.getName() + ".png");
+            ImageIcon img = new ImageIcon(getClass().getResource("/Assets/" + cc.getName() + ".png"));
             Image scaled = img.getImage().getScaledInstance(220, 320, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaled);
 
