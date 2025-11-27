@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
-/*
- Chill comments with a bit of Bisaya peppered in:
- - Kini ang full Game.java nga imong gihangyo.
- - Transparency fixed so background layers actually show.
- - Ayaw kabalaka, wala ko gi-unsa ang game logic (gihikling lang ang UI transparency stuff).
-*/
-
 public class Game extends JFrame {
     private Player player;
     private Enemy enemy;
@@ -25,10 +18,7 @@ public class Game extends JFrame {
     private StatusCard playerCard, enemyCard;
 
     public Game() {
-
-        
-        setTitle("Fight Club Turn-Based Game");
-
+        setTitle("Fight Club");
         setSize(1280, 880);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -37,68 +27,75 @@ public class Game extends JFrame {
         showStartMenu();
     }
 
-    /** START MENU (simple, gana ra ni) **/
+    // START MENU (simple, gana ra ni)
     private void showStartMenu() {
         getContentPane().removeAll();
 
-        // Use BackgroundPanel for nice background
         BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\FightClubYada\\Assets\\background2.png",
-                "D:\\FightClubYada\\Assets\\background1.png"
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
         );
+
+        // IMPORTANT: set layout on the background panel (not on the frame)
         bgPanel.setLayout(new BoxLayout(bgPanel, BoxLayout.Y_AXIS));
         setContentPane(bgPanel);
 
-        // Add some space on top
+        // top spacing
         bgPanel.add(Box.createVerticalStrut(100));
 
-        // Title as an image
-        String titleImgPath = "D:\\FightClubYada\\Assets\\titlesc.png";
+        // title as image (not a button)
+        String titleImgPath = "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\titlesc.png";
         ImageIcon titleIcon = new ImageIcon(titleImgPath);
         Image titleImg = titleIcon.getImage().getScaledInstance(600, 150, Image.SCALE_SMOOTH);
         JLabel titleLabel = new JLabel(new ImageIcon(titleImg));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setOpaque(false);
         bgPanel.add(titleLabel);
 
-        bgPanel.add(Box.createVerticalStrut(50));
+        bgPanel.add(Box.createVerticalStrut(40));
 
-        // Image paths for buttons
-        String startImgPath = "D:\\FightClubYada\\Assets\\startbtn.png";
-        String howToPlayImgPath = "D:\\FightClubYada\\Assets\\howtoplaybtn.png";
-        String exitImgPath = "D:\\FightClubYada\\Assets\\exitbtn.png";
+        // paths for the button images
+        String startImgPath = "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\startbtn.png";
+        String howToPlayImgPath = "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\howtoplaybtn.png";
+        String exitImgPath = "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\exitbtn.png";
 
-        // Load and scale buttons
-        ImageIcon startIcon = new ImageIcon(startImgPath);
-        Image startImg = startIcon.getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH);
-        JButton startBtn = new JButton(new ImageIcon(startImg));
+        // create image buttons and scale them
+        JButton startBtn = makeImageButton(startImgPath, 250, 70);
+        JButton howToPlayBtn = makeImageButton(howToPlayImgPath, 300, 70);
+        JButton exitBtn = makeImageButton(exitImgPath, 250, 70);
 
-        ImageIcon howToPlayIcon = new ImageIcon(howToPlayImgPath);
-        Image howToPlayImg = howToPlayIcon.getImage().getScaledInstance(250, 60, Image.SCALE_SMOOTH);
-        JButton howToPlayBtn = new JButton(new ImageIcon(howToPlayImg));
+        // center them and add spacing
+        startBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        bgPanel.add(startBtn);
+        bgPanel.add(Box.createVerticalStrut(80));
 
-        ImageIcon exitIcon = new ImageIcon(exitImgPath);
-        Image exitImg = exitIcon.getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH);
-        JButton exitBtn = new JButton(new ImageIcon(exitImg));
+        howToPlayBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        bgPanel.add(howToPlayBtn);
+        bgPanel.add(Box.createVerticalStrut(80));
 
-        // Make buttons transparent and center them
-        JButton[] buttons = {startBtn, howToPlayBtn, exitBtn};
-        for (JButton btn : buttons) {
-            btn.setOpaque(false);
-            btn.setContentAreaFilled(false);
-            btn.setBorderPainted(false);
-            btn.setFocusPainted(false);
-            btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-            bgPanel.add(btn);
-            bgPanel.add(Box.createVerticalStrut(100)); // spacing
-        }
+        exitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        bgPanel.add(exitBtn);
+        bgPanel.add(Box.createVerticalGlue()); // push to top if space
 
-        // Button actions
-        startBtn.addActionListener(e -> initCharacterSelection());
+        // actions
+        startBtn.addActionListener(e -> showStoryScreen()); // show story first
         howToPlayBtn.addActionListener(e -> showHowToPlay());
         exitBtn.addActionListener(e -> System.exit(0));
 
         revalidate();
         repaint();
+    }
+
+    // helper to create a transparent image button with scaling
+    private JButton makeImageButton(String path, int w, int h) {
+        ImageIcon icon = new ImageIcon(path);
+        Image img = icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
+        JButton btn = new JButton(new ImageIcon(img));
+        btn.setOpaque(false);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        return btn;
     }
 
     private void showHowToPlay() {
@@ -114,14 +111,216 @@ public class Game extends JFrame {
         JOptionPane.showMessageDialog(this, msg, "How To Play", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    /** CHARACTER SELECTION (transparent too so background can show) **/
+    // STORY screen before character selection
+    private void showStoryScreen() {
+        getContentPane().removeAll();
+
+        // BACKGROUND PANEL
+        BackgroundPanel bgPanel = new BackgroundPanel(
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+        );
+        bgPanel.setLayout(new GridBagLayout());
+        setContentPane(bgPanel);
+
+        final String[] storyline = {
+                "Central Academy appeared to be a normal school, filled with students, classrooms, and the usual hustle of daily life. "
+                        + "But beneath the polished halls and strict rules, a hidden world thrived. In secret corners of the school — "
+                        + "abandoned classrooms, the sealed Old Gym, and rarely patrolled hallways — a fight club had existed for years. "
+                        + "Only the boldest students dared to enter, proving their strength, cunning, and skill against others who sought the same.",
+
+                "The fight club operated in tiers: juniors tested the newcomers, seniors defended the inner chambers, and at the top of it all "
+                        + "stood Ishiguro, the undefeated champion of the secret arena. Victory brought prestige, respect, and control over the "
+                        + "school’s hidden battlegrounds, while defeat meant humiliation — and sometimes a painful reminder that the club was "
+                        + "not a place for the faint of heart.",
+
+                "Now, a group of students — Mark, Jeno, Clyde, Mico, and Sherwin — have discovered the entrance to this clandestine world. "
+                        + "To survive and rise to the top, they must fight through waves of determined juniors, strategic seniors, and finally "
+                        + "confront Ishiguro himself. The school’s quiet halls are no longer safe; the secret arena has awakened, and only those "
+                        + "with courage, skill, and teamwork will prevail."
+        };
+
+        final int[] index = {0};
+        JPanel textBox = createTranslucentTextBox();
+
+        //TEXT AREA
+        JTextArea storyText = createStoryTextArea(storyline[index[0]]);
+
+        textBox.add(Box.createVerticalGlue());
+        textBox.add(storyText);
+        textBox.add(Box.createVerticalGlue());
+
+        //NEXT BUTTON
+        JButton nextBtn = createNextButton("NEXT");
+
+        //CONTAINER FOR TEXTBOX AND BUTTON
+        JPanel contentContainer = new JPanel();
+        contentContainer.setOpaque(false);
+        contentContainer.setLayout(new BoxLayout(contentContainer, BoxLayout.Y_AXIS));
+        contentContainer.add(textBox);
+        contentContainer.add(Box.createVerticalStrut(20));
+        contentContainer.add(nextBtn);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        bgPanel.add(contentContainer, gbc);
+
+
+        nextBtn.addActionListener(e -> {
+            index[0]++;
+            if (index[0] >= storyline.length) {
+                initCharacterSelection();
+                return;
+            }
+            storyText.setText(storyline[index[0]]);
+            storyText.revalidate();
+            storyText.repaint();
+        });
+
+        revalidate();
+        repaint();
+    }
+    
+
+
+    private void showIntermissionScreen() {
+        getContentPane().removeAll();
+
+        BackgroundPanel bgPanel = new BackgroundPanel(
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+        );
+        bgPanel.setLayout(new GridBagLayout());
+        setContentPane(bgPanel);
+
+        String titleText = "";
+        String intermissionText = "";
+        
+        // Determine which intermission text to show based on the defeated enemy
+        if (currentEnemyIndex == 1) { // After Junior (index 0) is defeated
+            titleText = "TIER CLEARED: JUNIOR DIVISION";
+            intermissionText = "The first wave of juniors collapses, sprawled across the abandoned classrooms and hallways. Their mischievous grins fade, replaced by respect for those who bested them. The newcomers realize that the fight club isn’t just a rumor — it’s real, and surviving it requires skill and teamwork. With the juniors cleared, the path deeper into the secret arena opens, leading toward the more experienced senior fighters.";
+        } else if (currentEnemyIndex == 2) { // After Senior (index 1) is defeated
+            titleText = "TIER CLEARED: SENIOR DIVISION";
+            intermissionText = "The seniors fall one by one, their confident smirks replaced by grudging admiration. They were masters of strategy and precision, and defeating them required clever thinking and relentless effort. The group feels stronger, more synchronized, and prepared for the ultimate challenge that lies at the heart of the fight club: Ishiguro, the reigning champion of the secret arena.";
+        } else {
+            // This shouldn't be called unless the game flow is broken
+            System.err.println("Called intermission at wrong index: " + currentEnemyIndex);
+            startNextEnemy();
+            return;
+        }
+
+        // Title Label
+        JLabel titleLabel = new JLabel(titleText);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        titleLabel.setForeground(Color.YELLOW);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Text Box and Area Setup (reusing helper methods)
+        JPanel textBox = createTranslucentTextBox();
+        JTextArea storyText = createStoryTextArea(intermissionText);
+        
+        textBox.add(Box.createVerticalGlue());
+        textBox.add(titleLabel);
+        textBox.add(Box.createVerticalStrut(15));
+        textBox.add(storyText);
+        textBox.add(Box.createVerticalGlue());
+
+        // NEXT BUTTON
+        JButton nextBtn = createNextButton("CONTINUE");
+        
+        // CONTAINER FOR TEXTBOX AND BUTTON
+        JPanel contentContainer = new JPanel();
+        contentContainer.setOpaque(false);
+        contentContainer.setLayout(new BoxLayout(contentContainer, BoxLayout.Y_AXIS));
+        contentContainer.add(textBox);
+        contentContainer.add(Box.createVerticalStrut(20));
+        contentContainer.add(nextBtn);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        bgPanel.add(contentContainer, gbc);
+
+        // Action: Resume to the next battle
+        nextBtn.addActionListener(e -> startNextEnemy());
+
+        revalidate();
+        repaint();
+    }
+
+    // Helper method to create the semi-transparent text box panel
+    private JPanel createTranslucentTextBox() {
+        JPanel textBox = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(0, 0, 0, 180)); // Translucent black background
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 35, 35);
+                g2.dispose();
+            }
+        };
+        textBox.setOpaque(false);
+        
+        
+        textBox.setLayout(new BoxLayout(textBox, BoxLayout.Y_AXIS));
+        // Use padding (EmptyBorder) to define the minimum size around the text
+        textBox.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30)); 
+        return textBox;
+    }
+    
+    // Helper method to create the JTextArea for story text
+    private JTextArea createStoryTextArea(String text) {
+        JTextArea storyText = new JTextArea(text);
+        // Increased Font Size for better visibility/fit
+        storyText.setFont(new Font("Serif", Font.PLAIN, 24)); 
+        storyText.setLineWrap(true);
+        storyText.setWrapStyleWord(true);
+        storyText.setEditable(false);
+        storyText.setOpaque(false);
+        storyText.setForeground(Color.WHITE);
+        storyText.setFocusable(false);
+        storyText.setHighlighter(null);
+        storyText.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        // Set a maximum column width (e.g., 60 columns) but let the height be determined by content
+        storyText.setColumns(60);
+        
+        return storyText;
+    }
+
+    // Helper method to create the Next/Continue button
+    private JButton createNextButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Arial", Font.BOLD, 24));
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(new Color(20, 20, 20)); // Solid dark gray
+        btn.setOpaque(true);
+        btn.setContentAreaFilled(true);
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.DARK_GRAY, 2),
+                BorderFactory.createEmptyBorder(10, 30, 10, 30)
+        ));
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return btn;
+    }
+
+    // CHARACTER SELECTION
     private void initCharacterSelection() {
         getContentPane().removeAll();
 
-        // Use your custom BackgroundPanel to show background behind transparent buttons
         BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\FightClubYada\\Assets\\background2.png",
-                "D:\\FightClubYada\\Assets\\background1.png"
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
         );
         bgPanel.setLayout(new BorderLayout());
         setContentPane(bgPanel);
@@ -130,7 +329,7 @@ public class Game extends JFrame {
         JLabel title = new JLabel("Choose your character:");
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        title.setForeground(Color.WHITE); // make text visible
+        title.setForeground(Color.WHITE);
         title.setOpaque(false);
         bgPanel.add(title, BorderLayout.NORTH);
 
@@ -142,7 +341,7 @@ public class Game extends JFrame {
 
         int index = 0;
         for (CharacterClass cc : availableCharacters) {
-            ImageIcon img = new ImageIcon("D:\\FightClubYada\\Assets\\" + cc.getName() + ".png");
+            ImageIcon img = new ImageIcon("D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\" + cc.getName() + ".png");
             Image scaled = img.getImage().getScaledInstance(220, 320, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaled);
 
@@ -165,7 +364,6 @@ public class Game extends JFrame {
             if (index >= 5) break;
         }
 
-        // Wrapper panel
         JPanel wrapper = new JPanel();
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
         wrapper.setOpaque(false);
@@ -178,111 +376,170 @@ public class Game extends JFrame {
         repaint();
     }
 
-
-
-    /** BATTLE **/
+    // BATTLE START / RESTART
     private void startBattle() {
         // start at the first enemy for a new game
         currentEnemyIndex = 0;
         enemy = enemySequence[currentEnemyIndex].createEnemy();
         setupBattleScreen();
     }
-
-    private void setupBattleScreen() {
-        getContentPane().removeAll();
-
-        // two-layer background (bottom then top)
-        BackgroundPanel bgPanel = new BackgroundPanel(
-            "D:\\FightClubYada\\Assets\\background2.png",
-            "D:\\FightClubYada\\Assets\\background1.png"
-        );
-
-        // set as content pane so bg paints behind everything
-        setContentPane(bgPanel);
-        bgPanel.setLayout(new BorderLayout(10, 10));
-
-        // Status cards panel (player + enemy) - make them transparent
-        JPanel cardsPanel = new JPanel(new GridLayout(1, 2, 50, 10));
-        cardsPanel.setOpaque(false);
-        cardsPanel.setPreferredSize(new Dimension(0, 120));
-        playerCard = new StatusCard();
-        enemyCard = new StatusCard();
-        playerCard.setOpaque(false);
-        enemyCard.setOpaque(false);
-        playerCard.setPreferredSize(new Dimension(300, 120));
-        enemyCard.setPreferredSize(new Dimension(300, 120));
-        playerCard.updateFromEntity(player);
-        enemyCard.updateFromEntity(enemy);
-        cardsPanel.add(playerCard);
-        cardsPanel.add(enemyCard);
-
-        // center wrapper to keep the cards in the middle
-        JPanel centerWrapper = new JPanel();
-        centerWrapper.setOpaque(false);
-        centerWrapper.setLayout(new BoxLayout(centerWrapper, BoxLayout.Y_AXIS));
-        centerWrapper.add(Box.createVerticalGlue());
-        centerWrapper.add(cardsPanel);
-        centerWrapper.add(Box.createVerticalGlue());
-        bgPanel.add(centerWrapper, BorderLayout.CENTER);
-
-        // Skills panel (horizontal) above battle log
-        skillPanel = new JPanel(new GridLayout(1, 0, 6, 6));
-        skillPanel.setOpaque(false);
-        skillPanel.setBorder(BorderFactory.createTitledBorder("Skills"));
-        updateSkillButtons();
-
-        // Action buttons (put them in a semi-transparent panel so text is readable)
-        defendBtn = new JButton("Defend");
-        potionBtn = new JButton("Potions");
-        runBtn = new JButton("Run");
-        defendBtn.addActionListener(this::defendAction);
-        potionBtn.addActionListener(this::potionAction);
-        runBtn.addActionListener(this::runAction);
-
-        JPanel actionPanel = new JPanel(new GridLayout(1, 3, 10, 0));
-        actionPanel.setOpaque(false);
-        actionPanel.add(defendBtn);
-        actionPanel.add(potionBtn);
-        actionPanel.add(runBtn);
-
-        // Bottom panel combining skills + actions (transparent)
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setOpaque(false);
-        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
-        skillPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        bottomPanel.add(skillPanel);
-        bottomPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        bottomPanel.add(actionPanel);
-
-        // Battle log (transparent text area + transparent scroll viewport)
-        battleLog = new JTextArea(10, 50);
-        battleLog.setEditable(false);
-        battleLog.setLineWrap(true);
-        battleLog.setWrapStyleWord(true);
-        battleLog.setOpaque(false); // text area transparent
-        battleLog.setForeground(Color.WHITE); // make text visible on background (adjust as needed)
-
-        JScrollPane scrollPane = new JScrollPane(battleLog);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Battle Log"));
-
-        // log wrapper (transparent) - skills above, log below
-        JPanel logWrapper = new JPanel(new BorderLayout());
-        logWrapper.setOpaque(false);
-        logWrapper.add(bottomPanel, BorderLayout.NORTH);
-        logWrapper.add(scrollPane, BorderLayout.CENTER);
-
-        bgPanel.add(logWrapper, BorderLayout.SOUTH);
-
-        battleLog.setText("A wild " + enemy.getName() + " appears!\n");
-        refreshCards();
-        revalidate();
-        repaint();
+    
+    // Continue to the next enemy in the sequence
+    private void startNextEnemy() {
+        if (currentEnemyIndex < enemySequence.length) {
+            enemy = enemySequence[currentEnemyIndex].createEnemy();
+            setupBattleScreen();
+             // Manually add the intro message for the new enemy
+            battleLog.setText("A new enemy appears: " + enemy.getName() + "!\n");
+        } else {
+            // Should not happen, as this is checked before calling
+        }
     }
 
-    /** SKILLS **/
+    private void setupBattleScreen() {
+    getContentPane().removeAll();
+
+    BackgroundPanel bgPanel = new BackgroundPanel(
+        "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
+        "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+    );
+    bgPanel.setLayout(new BorderLayout(10, 10)); 
+    setContentPane(bgPanel);
+    
+    Color solidBlockColor = new Color(30, 30, 30);
+    Color logBgColor = new Color(50, 50, 50);
+    Color buttonBg = new Color(50, 50, 50);
+    Color buttonHover = new Color(70, 70, 70);
+    Color buttonBorder = new Color(150, 150, 150);
+
+    // 1. STATUS CARDS AREA (TOP)
+    
+    JPanel cardsWrapper = new JPanel();
+    cardsWrapper.setOpaque(false);
+    cardsWrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
+    cardsWrapper.setLayout(new BorderLayout());
+
+    JPanel cardsPanel = new JPanel(new GridLayout(1, 2, 50, 10));
+    cardsPanel.setOpaque(false);
+    
+    playerCard = new StatusCard();
+    enemyCard = new StatusCard();
+    playerCard.setOpaque(false);
+    enemyCard.setOpaque(false);
+    
+    playerCard.setPreferredSize(new Dimension(300, 120));
+    enemyCard.setPreferredSize(new Dimension(300, 120));
+    
+    playerCard.updateFromEntity(player);
+    enemyCard.updateFromEntity(enemy);
+    
+    cardsPanel.add(playerCard);
+    cardsPanel.add(enemyCard);
+
+    JPanel centerWrapper = new JPanel();
+    centerWrapper.setOpaque(false);
+    centerWrapper.setLayout(new BoxLayout(centerWrapper, BoxLayout.Y_AXIS));
+    centerWrapper.add(Box.createVerticalGlue());
+    centerWrapper.add(cardsPanel);
+    centerWrapper.add(Box.createVerticalGlue());
+    
+    cardsWrapper.add(centerWrapper, BorderLayout.CENTER);
+    bgPanel.add(cardsWrapper, BorderLayout.NORTH);
+
+    // ACTIONS AND LOG AREA (BOTTOM)
+
+    JPanel controlsWrapper = new JPanel(new BorderLayout(0, 10));
+    controlsWrapper.setBackground(solidBlockColor);
+    controlsWrapper.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); 
+    
+    //Log Area
+    battleLog = new JTextArea(8, 40);
+    battleLog.setEditable(false);
+    battleLog.setLineWrap(true);
+    battleLog.setWrapStyleWord(true);
+    battleLog.setOpaque(true);
+    battleLog.setBackground(logBgColor);
+    battleLog.setForeground(Color.WHITE);
+    battleLog.setFont(new Font("Monospaced", Font.PLAIN, 14));
+
+    JScrollPane scrollPane = new JScrollPane(battleLog);
+    scrollPane.setOpaque(true); 
+    scrollPane.getViewport().setOpaque(true);
+    scrollPane.getViewport().setBackground(logBgColor);
+    scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY, 1), "Battle Log"));
+    scrollPane.setViewportBorder(null);
+        
+    skillPanel = new JPanel(new GridLayout(1, 0, 6, 6));
+    skillPanel.setOpaque(true); 
+    skillPanel.setBackground(solidBlockColor);
+    skillPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE, 1), "Skills"));
+    updateSkillButtons();
+    
+    defendBtn = createModernButton("Defend", buttonBg, buttonHover, buttonBorder);
+    potionBtn = createModernButton("Potions", buttonBg, buttonHover, buttonBorder);
+    runBtn = createModernButton("Run", buttonBg, buttonHover, buttonBorder);
+    
+    defendBtn.addActionListener(this::defendAction);
+    potionBtn.addActionListener(this::potionAction);
+    runBtn.addActionListener(this::runAction);
+
+    JPanel actionPanel = new JPanel(new GridLayout(1, 3, 10, 0));
+    actionPanel.setOpaque(true);
+    actionPanel.setBackground(solidBlockColor);
+    actionPanel.add(defendBtn);
+    actionPanel.add(potionBtn);
+    actionPanel.add(runBtn);
+
+    // Combine skills and actions vertically
+    JPanel controlsPanel = new JPanel();
+    controlsPanel.setOpaque(true);
+    controlsPanel.setBackground(solidBlockColor);
+    controlsPanel.setLayout(new BoxLayout(controlsPanel, BoxLayout.Y_AXIS));
+    skillPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    controlsPanel.add(skillPanel);
+    controlsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    controlsPanel.add(actionPanel);
+    
+    // Assemble the controlsWrapper yadadee
+    controlsWrapper.add(scrollPane, BorderLayout.CENTER);
+    controlsWrapper.add(controlsPanel, BorderLayout.SOUTH);
+    
+    bgPanel.add(controlsWrapper, BorderLayout.SOUTH);
+
+
+    // Finalization
+    if (currentEnemyIndex == 0 && battleLog.getText().isEmpty()) {
+        battleLog.setText("A wild " + enemy.getName() + " appears!\n");
+    }
+
+    refreshCards();
+    revalidate();
+    repaint();
+}
+
+    private JButton createModernButton(String text, Color bg, Color hover, Color border) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(bg);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(border, 1));
+        button.setPreferredSize(new Dimension(100, 35));
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(hover);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(bg);
+            }
+        });
+        return button;
+    }
+
+    // SKILL BUTTONS
     private void updateSkillButtons() {
+        if (skillPanel == null) return;
         skillPanel.removeAll();
         if (player == null) return;
         for (Skill s : player.getSkills()) {
@@ -314,7 +571,7 @@ public class Game extends JFrame {
         player.useMana(chosenSkill.getManaCost());
         enemy.takeDamage(chosenSkill.getDamage());
         battleLog.append("You used " + chosenSkill.getName() + " for " + chosenSkill.getDamage() + " damage.\n");
-        if (!chosenSkill.getEffect().equals("None"))
+        if (!"None".equals(chosenSkill.getEffect()))
             battleLog.append("Effect applied: " + chosenSkill.getEffect() + "\n");
 
         refreshCards();
@@ -328,9 +585,10 @@ public class Game extends JFrame {
         updateSkillButtons();
     }
 
-    /** ACTIONS **/
+    // ACTIONS
     private void defendAction(ActionEvent e) {
         battleLog.append("You brace for the enemy's attack.\n");
+        disableActionButtons(); // Disable actions during enemy turn
         enemyTurnDelayed(true);
     }
 
@@ -373,18 +631,18 @@ public class Game extends JFrame {
     }
 
     private void runAction(ActionEvent e) {
+        disableActionButtons();
         if (MacroLib.randInt(1, 100) <= 50) {
-            battleLog.append("You successfully ran away!\n");
+            battleLog.append("You successfully ran away! Game over.\n");
             showStartMenu();
         } else {
             battleLog.append("You failed to run away!\n");
-            enemyTurnDelayed(false);
+            enemyTurnDelayed(false); // Enemy gets a turn
         }
     }
 
-    /** ENEMY TURN WITH DELAY **/
+    // ENEMY TURN WITH DELAY
     private void enemyTurnDelayed(boolean playerDefending) {
-        disableActionButtons();
         Timer t = new Timer(800, e -> {
             Skill enemySkill = enemy.chooseAction(player);
             int dmg;
@@ -414,11 +672,9 @@ public class Game extends JFrame {
             battleLog.append(enemy.getName() + " defeated!\n");
             currentEnemyIndex++;
             if (currentEnemyIndex < enemySequence.length) {
-                enemy = enemySequence[currentEnemyIndex].createEnemy();
-                battleLog.append("A new enemy appears: " + enemy.getName() + "\n");
-                refreshCards();
+                showIntermissionScreen();
             } else {
-                // Boss defeated -> show victory
+                // after boss killed -> victory
                 showVictoryScreen();
             }
         }
@@ -427,10 +683,33 @@ public class Game extends JFrame {
     private void showVictoryScreen() {
         getContentPane().removeAll();
 
+        BackgroundPanel bgPanel = new BackgroundPanel(
+            "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
+            "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+        );
+        bgPanel.setLayout(new BoxLayout(bgPanel, BoxLayout.Y_AXIS));
+        setContentPane(bgPanel);
+
+        //Victory Story Text
+        String finalStory = "Turns out, the Principal was behind all of this. After the Principal collapses dramatically in the center of the Old Gym, papers and training equipment scattered around him. For years, he had ruled the secret fight club, unbeaten and feared by all who dared enter. Now, the students — Mark, Jeno, Clyde, Mico, and Sherwin — stand victorious. Their journey through the secret tiers has tested their strength, intellect, and resolve.\n\nThough the fight club remains hidden from the rest of the school, its influence on the group is undeniable. They have earned respect, proven their abilities, and formed bonds that go beyond friendship. The secret arena has revealed that survival depends not only on power but on teamwork, strategy, and courage. For now, the academy returns to its quiet routine, but the lessons and victories of the hidden fight club will stay with them forever — and whispers of new challengers hint that the arena’s battles may not be over.";
+        JPanel textBox = createTranslucentTextBox();
+        JTextArea storyText = createStoryTextArea(finalStory);
+        
+        JLabel titleLabel = new JLabel("CHAMPIONS OF CENTRAL ACADEMY!");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        titleLabel.setForeground(Color.YELLOW);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        textBox.add(Box.createVerticalStrut(10));
+        textBox.add(titleLabel);
+        textBox.add(Box.createVerticalStrut(15));
+        textBox.add(storyText);
+        textBox.add(Box.createVerticalGlue());
+        
+        // UI Setup
         JPanel panel = new JPanel();
+        panel.setOpaque(false);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-        panel.setOpaque(false); // transparent so bg still shows (if bg present)
 
         JLabel victoryLabel = new JLabel("VICTORY!");
         victoryLabel.setFont(new Font("Arial", Font.BOLD, 72));
@@ -438,33 +717,30 @@ public class Game extends JFrame {
         victoryLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(victoryLabel);
 
-        panel.add(Box.createRigidArea(new Dimension(0, 50)));
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         JButton mainMenuBtn = new JButton("Back to Main Menu");
         mainMenuBtn.setFont(new Font("Arial", Font.BOLD, 24));
         mainMenuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainMenuBtn.addActionListener(e -> showStartMenu());
-        panel.add(mainMenuBtn);
+        
+        JPanel contentWrapper = new JPanel();
+        contentWrapper.setOpaque(false);
+        contentWrapper.setLayout(new BoxLayout(contentWrapper, BoxLayout.Y_AXIS));
+        contentWrapper.add(panel);
+        contentWrapper.add(Box.createVerticalStrut(20));
+        contentWrapper.add(textBox);
+        contentWrapper.add(Box.createVerticalStrut(30));
+        contentWrapper.add(mainMenuBtn);
 
-        getContentPane().add(panel);
+
+        bgPanel.add(Box.createVerticalGlue());
+        bgPanel.add(contentWrapper);
+        bgPanel.add(Box.createVerticalGlue());
+
         revalidate();
         repaint();
 
-        // small pulse animation
-        final int[] fontSize = {72};
-        final boolean[] growing = {true};
-
-        Timer timer = new Timer(50, e -> {
-            if (growing[0]) {
-                fontSize[0] += 2;
-                if (fontSize[0] >= 92) growing[0] = false;
-            } else {
-                fontSize[0] -= 2;
-                if (fontSize[0] <= 72) growing[0] = true;
-            }
-            victoryLabel.setFont(new Font("Arial", Font.BOLD, fontSize[0]));
-        });
-        timer.start();
     }
 
     private void checkPlayerStatus() {
@@ -472,23 +748,32 @@ public class Game extends JFrame {
             battleLog.append("You have been defeated!\n");
             if (!availableCharacters.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "You died! Choose another character.");
-                chooseNewPlayerAfterDeath(); // resume battle with current enemy
+                chooseNewPlayerAfterDeath(); // resume with current enemy
             } else {
                 battleLog.append("No more characters available. Game over.\n");
                 disableActionButtons();
+                // TODO: Add a proper Game Over screen here
             }
         }
     }
 
-    /** Choose replacement player after death without resetting enemy (panels transparent as well) **/
+    // Choose replacement player after death without resetting enemy
     private void chooseNewPlayerAfterDeath() {
         getContentPane().removeAll();
-        setLayout(new BorderLayout());
+
+        BackgroundPanel bgPanel = new BackgroundPanel(
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background2.png",
+                "D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\background1.png"
+        );
+        bgPanel.setLayout(new BorderLayout());
+        setContentPane(bgPanel);
 
         JLabel title = new JLabel("Choose a new character:");
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        add(title, BorderLayout.NORTH);
+        title.setForeground(Color.WHITE);
+        title.setOpaque(false);
+        bgPanel.add(title, BorderLayout.NORTH);
 
         JPanel topRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 20));
         topRow.setOpaque(false);
@@ -497,13 +782,14 @@ public class Game extends JFrame {
 
         int index = 0;
         for (CharacterClass cc : availableCharacters) {
-            ImageIcon img = new ImageIcon("D:\\FightClubYada\\Assets\\" + cc.getName() + ".png");
+            ImageIcon img = new ImageIcon("D:\\\\FightClubYada\\\\OOPTurnBasedGame\\\\Assets\\\\" + cc.getName() + ".png");
             Image scaled = img.getImage().getScaledInstance(220, 320, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaled);
 
             JButton heroBtn = new JButton(scaledIcon);
-            heroBtn.setBorderPainted(false);
+            heroBtn.setOpaque(false);
             heroBtn.setContentAreaFilled(false);
+            heroBtn.setBorderPainted(false);
             heroBtn.setFocusPainted(false);
             heroBtn.setToolTipText(cc.getName() + " | HP: " + cc.getMaxHp() + " Mana: " + cc.getMaxMana());
 
@@ -525,24 +811,18 @@ public class Game extends JFrame {
         wrapper.add(topRow);
         wrapper.add(bottomRow);
 
-        add(wrapper, BorderLayout.CENTER);
+        bgPanel.add(wrapper, BorderLayout.CENTER);
         revalidate();
         repaint();
     }
 
-    /* -------------------------
-       BackgroundPanel - 2 layer
-       -------------------------
-       bottom bg = bg1, top overlay = bg2
-       gamay lang ang comments para di formal kaayo
-    */
     class BackgroundPanel extends JPanel {
         private Image bg1, bg2;
 
         public BackgroundPanel(String image1Path, String image2Path) {
             loadBackgrounds(image1Path, image2Path);
             setLayout(new BorderLayout());
-            setOpaque(true); // the panel paints the images
+            setOpaque(true); // the panel paints bg itself
         }
 
         public void loadBackgrounds(String image1Path, String image2Path) {
@@ -571,18 +851,20 @@ public class Game extends JFrame {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            // draw bottom layer first
             if (bg1 != null) {
                 g.drawImage(bg1, 0, 0, getWidth(), getHeight(), this);
+            } else {
+                g.setColor(new Color(20, 20, 20));
+                g.fillRect(0, 0, getWidth(), getHeight());
             }
 
-            // draw top layer (overlay)
             if (bg2 != null) {
                 g.drawImage(bg2, 0, 0, getWidth(), getHeight(), this);
             }
         }
     }
 
+    // Button enabling/disabling
     private void disableActionButtons() {
         if (defendBtn != null) defendBtn.setEnabled(false);
         if (potionBtn != null) potionBtn.setEnabled(false);
@@ -602,65 +884,96 @@ public class Game extends JFrame {
     }
 
     private void refreshCards() {
-        if (playerCard != null) playerCard.updateFromEntity(player);
-        if (enemyCard != null) enemyCard.updateFromEntity(enemy);
+        if (playerCard != null && player != null) {
+            playerCard.updateFromEntity(player);
+        }
+        if (enemyCard != null && enemy != null) {
+            enemyCard.updateFromEntity(enemy);
+        }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Game game = new Game();
-            game.setVisible(true);
-        });
+            SwingUtilities.invokeLater(() -> {
+                Game game = new Game();
+                game.setVisible(true);
+            });
+        }
     }
-}
+    class StatusCard extends JPanel {
+        private final JLabel nameLabel;
+        private final JProgressBar hpBar, manaBar;
+        private final int ARC_SIZE = 25;
 
-/** STATUS CARD **/
-class StatusCard extends JPanel {
-    private final JLabel nameLabel;
-    private final JProgressBar hpBar, manaBar;
-    private final JLabel statusLabel;
+        public StatusCard() {
+            setPreferredSize(new Dimension(350, 160));
+            setOpaque(false);
+            
+            setBorder(BorderFactory.createEmptyBorder(12, 12, 14, 12));
+            
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-    public StatusCard() {
-        setPreferredSize(new Dimension(350, 140));
-        // we want the card itself transparent so bg shows, but keep a border so it's visible
-        setOpaque(false);
-        setLayout(new BorderLayout(8, 8));
+            // Name Label (Top)
+            nameLabel = new JLabel("Name");
+            nameLabel.setFont(new Font("Serif", Font.BOLD, 26));
+            nameLabel.setForeground(Color.WHITE);
+            nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            
+            add(nameLabel);
 
-        // border so you can still see the card area on top of the bg
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+            add(Box.createVerticalStrut(10));
 
-        JPanel center = new JPanel();
-        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
-        center.setOpaque(false);
+            // HP Bar
+            hpBar = new JProgressBar();
+            hpBar.setStringPainted(true);
+            hpBar.setForeground(new Color(200, 50, 50));
+            hpBar.setBackground(new Color(100, 10, 10, 100));
+            hpBar.setOpaque(false);
+            hpBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+            // Constrain the bar height for a blocky look
+            hpBar.setMaximumSize(new Dimension(350, 24));
+            
+            hpBar.setFont(new Font("Monospaced", Font.BOLD, 14));
+            add(hpBar);
 
-        nameLabel = new JLabel("Name");
-        nameLabel.setFont(new Font("Serif", Font.BOLD, 18));
-        nameLabel.setForeground(Color.WHITE); // text more visible on most backgrounds
-        center.add(nameLabel);
+            // Spacing
+            add(Box.createVerticalStrut(10));
 
-        hpBar = new JProgressBar();
-        hpBar.setStringPainted(true);
-        hpBar.setForeground(Color.RED);
-        hpBar.setOpaque(false); // try to keep bars transparent-ish (depends on LAF)
-        center.add(hpBar);
+            // Mana Bar
+            manaBar = new JProgressBar();
+            manaBar.setStringPainted(true);
+            manaBar.setForeground(new Color(100, 100, 255));
+            manaBar.setBackground(new Color(10, 10, 50, 100));
+            manaBar.setOpaque(false);
+            manaBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+            manaBar.setMaximumSize(new Dimension(350, 20));
 
-        manaBar = new JProgressBar();
-        manaBar.setStringPainted(true);
-        manaBar.setForeground(Color.BLUE);
-        manaBar.setOpaque(false);
-        center.add(manaBar);
+            manaBar.setFont(new Font("Monospaced", Font.BOLD, 14));
+            add(manaBar);
+            
+            add(Box.createVerticalGlue());
+        }
 
-        statusLabel = new JLabel("- No Status Effects -");
-        statusLabel.setFont(new Font("Serif", Font.ITALIC, 12));
-        statusLabel.setForeground(Color.WHITE);
-        center.add(statusLabel);
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        add(center, BorderLayout.CENTER);
+        g2.setColor(new Color(150, 0, 0, 120));
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), ARC_SIZE, ARC_SIZE);
+
+        g2.setColor(new Color(255, 50, 50, 180));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, ARC_SIZE, ARC_SIZE);
+
+        g2.dispose();
     }
 
     public void updateFromEntity(Entity e) {
         if (e == null) return;
         nameLabel.setText(e.getName());
+        
         hpBar.setMaximum(e.getMaxHp());
         hpBar.setValue(Math.max(0, e.getHp()));
         hpBar.setString("HP: " + e.getHp() + "/" + e.getMaxHp());
@@ -668,7 +981,5 @@ class StatusCard extends JPanel {
         manaBar.setMaximum(e.getMaxMana());
         manaBar.setValue(Math.max(0, e.getMana()));
         manaBar.setString("SP: " + e.getMana() + "/" + e.getMaxMana());
-
-        statusLabel.setText("- No Status Effects -");
     }
 }

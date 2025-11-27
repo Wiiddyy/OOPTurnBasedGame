@@ -59,47 +59,56 @@ public class CharacterClass {
 
     public static final CharacterClass MARK = new CharacterClass.Builder()
         .name("Mark")
-        .maxHp(100)
-        .maxMana(60)
+        .maxHp(140)
+        .maxMana(100)
         .skills(List.of(
-            new Skill ("Kalimot ko", 18, 10, "None"),
-            new Skill ("Tarantado", 20, 5, "None")
+            new Skill ("Forgotten Assignment", 1000, 10, "None"),
+            new Skill ("Crashout", 28, 15, "None"),
+            new Skill ("Last-Minute Cram Attack", 40, 25, "effect")
         ))
         .build();
 
     public static final CharacterClass JENO = new CharacterClass.Builder()
         .name("Jeno")
-        .maxHp(100)
-        .maxMana(60)
+        .maxHp(160)
+        .maxMana(85)
         .skills(List.of(
-            new Skill ("Testing", 20, 10, "None")
+            new Skill ("Double Checker", 22, 10, "None"),
+            new Skill ("Exam Panic Surge", 35, 20, "effect"),
+            new Skill ("Brain Overload Smash", 45, 30, "effect")
         ))
         .build();
 
     public static final CharacterClass CLYDE = new CharacterClass.Builder()
         .name("Clyde")
-        .maxHp(100)
-        .maxMana(60)
+        .maxHp(80)
+        .maxMana(150)
         .skills(List.of(
-            new Skill ("Holy INC", 50, 50, "None")
+            new Skill ("Outsmart", 45, 35, "None"),
+            new Skill ("Ruler flick", 30, 25, "effect"),
+            new Skill ("Desk Smash", 60, 45, "effect")
         ))
         .build();
     
     public static final CharacterClass MICO = new CharacterClass.Builder()
         .name("Mico")
-        .maxHp(100)
-        .maxMana(60)
+        .maxHp(115)
+        .maxMana(90)
         .skills(List.of(
-            new Skill ("Crazy", 50, 50, "None")
+            new Skill ("Crazy Spin", 28, 16, "None"),
+            new Skill ("Paper Cutter Swipe", 20, 12, "effect"),
+            new Skill ("Backpack Uppercut", 38, 25, "effect")
         ))
         .build();
 
     public static final CharacterClass SHERWIN = new CharacterClass.Builder()
         .name("Sherwin")
-        .maxHp(100)
-        .maxMana(60)
+        .maxHp(225)
+        .maxMana(120)
         .skills(List.of(
-            new Skill ("Crazy", 50, 50, "None")
+            new Skill ("Notebook Shied Bash", 18, 10, "None"),
+            new Skill ("Desk Slam", 30, 20, "effect"),
+            new Skill ("Hallway Roar", 32, 25, "effect")
         ))
         .build();
 
