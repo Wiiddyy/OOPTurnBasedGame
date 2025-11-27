@@ -60,28 +60,34 @@ public class EnemyType {
     
     public static final EnemyType JUNIOR = new EnemyType.Builder()
             .name("Junior Student")
-            .maxHp(100)
-            .maxMana(80)
+            .maxHp(150)
+            .maxMana(67)
             .skills(List.of(
-                    new Skill("Watatatoo", 20, 10, "Bleed")
+                    new Skill ("Scissor Cut", 20, 12, "Bleed"),
+                    new Skill ("Notebook Throw", 15, 10, "None"),
+                    new Skill ("Pencil Jab", 10, 5, "Bleed")
             ))
             .build();
     
     public static final EnemyType SENIOR = new EnemyType.Builder()
             .name("Senior Student")
-            .maxHp(100)
-            .maxMana(80)
+            .maxHp(220)
+            .maxMana(100)
             .skills(List.of(
-                    new Skill("Watashi", 50, 100, "None")
+                    new Skill ("Elite Ball Knowledge", 35, 20, "None"),
+                    new Skill ("Upperclass Kick", 28, 15, "None"),
+                    new Skill ("Graduation Punch", 32, 18, "None")
             ))
             .build();
 
     public static final EnemyType BOSS = new EnemyType.Builder()
-            .name("Ishiguro")
-            .maxHp(150)
+            .name("Principal")
+            .maxHp(650)
             .maxMana(999)
             .skills(List.of(
-                new Skill("Borderline Unhinged", 20, 250, "None")
+                new Skill ("Called to Office", 40, 60, "None"),
+                new Skill ("Expelled", 55, 80, "None"),
+                new Skill ("Suspension", 50, 70, "None")
             ))
             .build();
 }
